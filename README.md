@@ -1,114 +1,135 @@
-# Credit Card Fraud Detection Dataset
+# Credit Card Fraud Detection Using Machine Learning
 
 ## Overview
-This repository contains a credit card transaction dataset commonly used for fraud detection analysis and machine learning projects. The dataset includes anonymized credit card transactions with features that can be used to identify fraudulent activities.
+This project implements a credit card fraud detection system using machine learning algorithms. The project compares three different classification models (Logistic Regression, Decision Tree, and Random Forest) and explores both undersampling and oversampling (SMOTE) techniques to handle imbalanced data.
+
+## Project Workflow
+
+### 1. Data Loading and Exploration
+- Load the credit card transaction dataset
+- Display dataset shape, info, and statistics
+- Check for missing values and duplicates
+
+### 2. Data Preprocessing
+- **Feature Scaling**: Standardized the 'Amount' column using StandardScaler
+- **Feature Selection**: Dropped the 'Time' column
+- **Duplicate Removal**: Removed duplicate transactions
+
+### 3. Handling Imbalanced Data
+The dataset is highly imbalanced with far more legitimate transactions than fraudulent ones. Two approaches were implemented:
+
+#### Undersampling
+- Randomly sampled 473 normal transactions to match the number of fraudulent transactions
+- Created a balanced dataset with equal representation of both classes
+
+#### Oversampling (SMOTE)
+- Used Synthetic Minority Over-sampling Technique (SMOTE)
+- Generated synthetic samples for the minority class (fraudulent transactions)
+- Balanced the dataset without losing information from the majority class
+
+### 4. Model Training and Evaluation
+Three machine learning models were trained and compared:
+
+#### Models Used:
+1. **Logistic Regression**
+2. **Decision Tree Classifier**
+3. **Random Forest Classifier**
+
+#### Evaluation Metrics:
+- Accuracy Score
+- Precision Score
+- Recall Score
+- F1 Score
+
+### 5. Model Comparison
+- Created comparison visualizations using bar plots
+- Compared model performance across different sampling techniques
+- Selected the best performing model
+
+### 6. Model Deployment
+- Trained final Random Forest model on the complete oversampled dataset
+- Saved the model using joblib for future predictions
+- Implemented prediction function to classify new transactions
 
 ## Dataset Description
 
-### Files
-- `creditcard.csv` - Main dataset file containing transaction records
-- `creditcard.csv.bz2` - Compressed version of the dataset
-
 ### Features
-The dataset contains the following columns:
-- **Time**: Number of seconds elapsed between this transaction and the first transaction in the dataset
-- **V1-V28**: Anonymized features resulting from PCA transformation (to protect user identities and sensitive information)
-- **Amount**: Transaction amount
-- **Class**: Target variable (0 = legitimate transaction, 1 = fraudulent transaction)
+- **Time**: Number of seconds elapsed between transactions
+- **V1-V28**: Anonymized features from PCA transformation
+- **Amount**: Transaction amount (standardized)
+- **Class**: Target variable (0 = Normal, 1 = Fraudulent)
 
-### Dataset Characteristics
-- Contains transactions made by European cardholders
-- Highly imbalanced dataset (fraudulent transactions are much rarer than legitimate ones)
-- All features are numerical
-- PCA-transformed features maintain data privacy while preserving analytical value
+## Installation and Requirements
 
-## Usage
-
-### Loading the Dataset
-
-#### Python (Pandas)
-```python
-import pandas as pd
-
-# Load the CSV file
-df = pd.read_csv('creditcard.csv')
-
-# Or load the compressed version
-df = pd.read_csv('creditcard.csv.bz2', compression='bz2')
-
-print(df.head())
-print(df.info())
+### Required Libraries
+```bash
+pip install pandas numpy scikit-learn seaborn matplotlib imbalanced-learn joblib
 ```
 
-#### R
-```r
-# Load the CSV file
-data <- read.csv('creditcard.csv')
-
-# View the structure
-str(data)
-head(data)
-```
-
-## Potential Use Cases
-- Binary classification (fraud vs. legitimate)
-- Anomaly detection
-- Imbalanced dataset handling techniques
-- Machine learning model training and evaluation
-- Feature engineering and selection
-- Cost-sensitive learning
-
-## Common Analysis Tasks
-1. **Exploratory Data Analysis (EDA)**
-   - Distribution of fraudulent vs. legitimate transactions
-   - Transaction amount patterns
-   - Time-based patterns
-
-2. **Data Preprocessing**
-   - Handling class imbalance (SMOTE, undersampling, oversampling)
-   - Feature scaling
-   - Train-test split with stratification
-
-3. **Model Building**
-   - Logistic Regression
-   - Random Forest
-   - XGBoost
-   - Neural Networks
-   - Isolation Forest
-
-4. **Evaluation Metrics**
-   - Precision, Recall, F1-Score
-   - ROC-AUC
-   - Precision-Recall Curve
-   - Confusion Matrix
-
-## Important Considerations
-- **Class Imbalance**: The dataset is highly imbalanced. Use appropriate techniques like SMOTE, class weights, or ensemble methods
-- **Evaluation Metrics**: Accuracy is not a good metric for this dataset. Focus on Precision, Recall, F1-Score, and AUC-ROC
-- **Privacy**: Features V1-V28 are already anonymized through PCA transformation
-
-## Requirements
+### Dependencies
 ```
 pandas
 numpy
 scikit-learn
-matplotlib
 seaborn
-imbalanced-learn (for SMOTE)
+matplotlib
+imbalanced-learn
+joblib
 ```
 
-## Installation
-```bash
-pip install pandas numpy scikit-learn matplotlib seaborn imbalanced-learn
+## Usage
+
+### Running the Notebook
+1. Open `credit_card (1).ipynb` in Jupyter Notebook or JupyterLab
+2. Update the file path to your dataset location
+3. Run all cells sequentially
+
+### Making Predictions
+```python
+import joblib
+
+# Load the saved model
+model = joblib.load("credid_card_model")
+
+# Make prediction (provide 29 features)
+pred = model.predict([[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]])
+
+if pred == 0:
+    print("Normal transaction")
+else:
+    print("Fraudulent transaction")
 ```
 
+## Results
 
+The project successfully demonstrates:
+- Effective handling of imbalanced datasets using both undersampling and oversampling
+- Comparison of multiple machine learning algorithms
+- Model evaluation using multiple metrics
+- Deployment-ready fraud detection model
 
-## Acknowledgments
-This dataset is commonly used in the data science community for fraud detection research and education.
+## Files in Repository
+- `creditcard.csv` - Main dataset
+- `creditcard.csv.bz2` - Compressed dataset
+- `credit_card (1).ipynb` - Jupyter notebook with complete implementation
+- `credid_card_model` - Saved Random Forest model
+- `README.md` - Project documentation
+
+## Key Insights
+- SMOTE oversampling generally provides better results than undersampling as it doesn't discard data
+- Random Forest typically performs well for fraud detection tasks
+- Multiple evaluation metrics are crucial for imbalanced classification problems
+- Feature scaling improves model performance
+
+## Future Improvements
+- Hyperparameter tuning using GridSearchCV or RandomizedSearchCV
+- Try additional algorithms (XGBoost, Neural Networks)
+- Implement cross-validation for more robust evaluation
+- Feature importance analysis
+- Real-time fraud detection pipeline
 
 ## Contributing
-Feel free to fork this repository and submit pull requests for any improvements or additional analysis.
+Feel free to fork this repository and submit pull requests for improvements.
 
 ## Contact
 For questions or suggestions, please open an issue in this repository.
